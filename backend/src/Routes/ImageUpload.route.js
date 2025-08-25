@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const axios = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../upload")); // absolute path
@@ -17,6 +19,7 @@ const upload = multer({ storage });
 const ImageUploadRoute = router;
 
 const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
+console.log("hugg api",HUGGING_FACE_API_KEY);
 
 router.post("/", upload.single('image'), async (req, res) => {
     if (!req.file) {

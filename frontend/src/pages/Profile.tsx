@@ -32,6 +32,7 @@ const Profile = () => {
       {profile ? (
         <div>
           <p>{profile.email}</p>
+          gfdjghfdkj
         </div>
       ) : (
         <p>Loading...</p>

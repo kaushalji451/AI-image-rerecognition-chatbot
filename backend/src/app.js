@@ -5,6 +5,7 @@ const ImageUploadRoute = require("./Routes/ImageUpload.route");
 const ChatRouter = require("./Routes/Chat.route");
 const AuthRouter = require("./Routes/Auth.route");
 const ImageResponceRoute = require("./Routes/ImageResponce.route");
+const FollowupRoute = require("./Routes/Followup.route");
 const app = express();
 const connectDb = require('./utils/Connectdb');
 const dotenv = require('dotenv');
@@ -23,6 +24,7 @@ app.use("/upload",ImageUploadRoute);
 app.use("/chat",ChatRouter);
 app.use("/auth", AuthRouter);
 app.use("/imageresponce", ImageResponceRoute);
+app.use("/followups", FollowupRoute);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

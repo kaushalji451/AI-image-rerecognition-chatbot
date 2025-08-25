@@ -23,19 +23,20 @@ const ChatBox = () => {
     const sendMessage = async () => {
         if (!input.trim()) return;
 
-        // user message
+        // 1. User message
         const userMsg = { id: Date.now(), text: input, sender: "user" };
         setMessages((prev) => [...prev, userMsg]);
         setInput("");
 
-        // show typing immediately
+        // 2. Show typing immediately
         setIsTyping(true);
 
         try {
-            // get saved image response from localStorage
+            // 3. Get saved image response from localStorage
             const savedImageResponse = localStorage.getItem("imageResponse") || "";
+            const imageid = localStorage.getItem("imageId") || "";
 
-            // build follow-up input including previous messages + image response
+            // 4. Build follow-up input
             let followinput = "";
             if (savedImageResponse) {
                 followinput += `Here is the previous image analysis:\n${savedImageResponse}\n\n`;
@@ -47,18 +48,30 @@ const ChatBox = () => {
 
             followinput += `\nuser: ${input}`;
 
+            // 5. Get bot response
             const response = await chatresponce(followinput, "response in 50 words or less.");
-            console.log("Received response:", response.choices[0].message.content);
+            const botText = response.choices[0].message.content;
 
-            // small delay for realism
-            setTimeout(() => {
-                const botMsg = {
-                    id: Date.now() + 1,
-                    text: response.choices[0].message.content,
-                    sender: "bot",
-                };
+            // 6. Small delay for realism
+            setTimeout(async () => {
+                const botMsg = { id: Date.now() + 1, text: botText, sender: "bot" };
                 setMessages((prev) => [...prev, botMsg]);
-                setIsTyping(false); // stop typing when bot responds
+                setIsTyping(false);
+
+                // 7. Save Q&A to backend
+                try {
+                    console.log("Saving follow-up:",imageid, { question: input, answer: botText });
+                    await fetch(`http://localhost:3000/followups?imageId=${imageid}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            question: input,
+                            answer: botText,
+                        }),
+                    });
+                } catch (err) {
+                    console.error("Failed to save follow-up:", err);
+                }
             }, 1200);
         } catch (error) {
             console.error("Error fetching response:", error);
