@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 const ImageUploadRoute = router;
 
-const HUGGING_FACE_API_KEY = "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";
+const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
 
 router.post("/", upload.single('image'), async (req, res) => {
     if (!req.file) {

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 const AuthRouter = router;
 
-const JWT_SECRET = "abhi";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 AuthRouter.post("/register", async (req, res) => {
     const { email, password } = req.body;

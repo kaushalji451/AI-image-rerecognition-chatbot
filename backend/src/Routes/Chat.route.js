@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ChatRouter = router;
 
-const PPLX_API_KEY = "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";
+const PPLX_API_KEY = process.env.PPLX_API_KEY;
 
 ChatRouter.post("/", async (req, res) => {
     const {content} = req.body;
