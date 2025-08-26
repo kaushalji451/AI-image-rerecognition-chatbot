@@ -20,6 +20,7 @@ const Login = () => {
     try {
       let data = await loginUser(formData.email, formData.password);
       localStorage.setItem("token", data.data.token); // save JWT
+      window.dispatchEvent(new Event("loginStatusChanged"));
       alert("Login successful!");
       navigate("/profile");
 

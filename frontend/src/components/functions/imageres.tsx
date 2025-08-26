@@ -1,5 +1,5 @@
-const imageRes = async (label : String,response : String,userid : any) => {
-    console.log("imageRes saved in db:", label, response);
+const imageRes = async (label : String,response : String,userid : any,imageUrl : String) => {
+    console.log("imageRes saved in db:", label, response,imageUrl);
     try {
         let res = await fetch(`http://localhost:3000/imageresponce?id=${userid}`, {
             method: "POST",
@@ -8,7 +8,8 @@ const imageRes = async (label : String,response : String,userid : any) => {
             },
             body: JSON.stringify({
                 label,
-                response
+                response,
+                imageUrl
             })
         });
 

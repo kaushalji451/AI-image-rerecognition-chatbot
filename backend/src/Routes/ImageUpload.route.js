@@ -1,40 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const multer = require('multer');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const cloudinary = require('../utils/Cloudniry'); // import config
+const streamifier = require('streamifier');
 dotenv.config();
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../upload")); // absolute path
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // keep extension
-  }
-});
 
-const upload = multer({ storage });
-const ImageUploadRoute = router;
+const upload = multer({ storage: multer.memoryStorage() });
 
 const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
-console.log("hugg api",HUGGING_FACE_API_KEY);
 
 router.post("/", upload.single('image'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
-    console.log("getting request");
-
-    const imagePath = req.file.path;
-
+    console.log("got the image upload request ");
     try {
-        const image = fs.readFileSync(imagePath);
+        // Upload buffer to Cloudinary
+        let cloudinaryUpload = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: "user_uploads" },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                }
+            );
+            streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
 
+        // Call HuggingFace API with buffer
         const response = await axios.post(
             'https://api-inference.huggingface.co/models/google/vit-large-patch16-224',
-            image,
+            req.file.buffer,
             {
                 headers: {
                     Authorization: `Bearer ${HUGGING_FACE_API_KEY}`,
@@ -44,33 +42,25 @@ router.post("/", upload.single('image'), async (req, res) => {
             }
         );
 
-        // The response is an array of predictions with label and score
         const predictions = response.data;
+
         if (Array.isArray(predictions) && predictions.length > 0) {
-            res.json({
+            console.log(cloudinaryUpload.secure_url,predictions[0].label,`${Math.round(predictions[0].score * 100)}%`);
+            return res.json({
+                success: true,
+                imageUrl: cloudinaryUpload.secure_url,
                 predictions: {
                     label: predictions[0].label,
                     score: `${Math.round(predictions[0].score * 100)}%`,
                 }
             });
-            console.log('Predictions:', predictions);
         } else {
-            res.status(500).json({ error: "Unexpected API response format", data: predictions });
+            return res.status(500).json({ error: "Unexpected HuggingFace API response", data: predictions });
         }
     } catch (error) {
-        console.error('Error in /upload route:', error);
-
-        const apiError =
-            error.response && error.response.data
-                ? error.response.data
-                : error.message;
-
-        res.status(500).json({ error: 'An error occurred while processing the image.', details: apiError });
-    } finally {
-        fs.unlink(imagePath, (err) => {
-            if (err) console.error('Failed to delete uploaded image:', err);
-        });
+        console.error("Upload route error:", error.message);
+        return res.status(500).json({ error: "Something went wrong", details: error.message });
     }
-})
+});
 
-module.exports = ImageUploadRoute;
+module.exports = router;

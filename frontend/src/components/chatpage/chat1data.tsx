@@ -7,12 +7,15 @@ import Loader from "../Loader";
 export default function ImageResponse({
   responseText,
   score,
+  imageUrl
 }: {
   responseText?: string;
   score?: string;
+  imageUrl?: string;
 }) {
   console.log("got the response", responseText);
   console.log("got the score", score);
+  console.log("got the imageUrl", imageUrl);
   const content = responseText?.trim().length
     ? responseText!
     : "No response text provided. Please upload an image to get a description.";
@@ -115,12 +118,14 @@ export default function ImageResponse({
            </div>
             <p>Responce Matching Score {score}</p>
           </motion.div>
-
           {/* Scrollable content */}
           <motion.div
             variants={item}
             className="max-h-[70vh] overflow-y-auto px-4 sm:px-8 py-4 sm:py-6"
           >
+             <div>
+              <img src={imageUrl} alt="Uploaded" className="rounded-xl w-60 pb-2" />
+            </div>
             <article className="prose prose-invert prose-headings:font-extrabold prose-h1:text-3xl sm:prose-h1:text-4xl prose-h2:text-xl sm:prose-h2:text-2xl prose-h3:text-lg sm:prose-h3:text-xl prose-p:leading-relaxed prose-li:leading-relaxed">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}

@@ -20,6 +20,7 @@ const Signup = () => {
         try {
             let data = await registerUser(formData.email, formData.password);
             console.log((data.data));
+            alert("User registered successfully know you can login");
         } catch (error) {
             alert("Some error occurred.");
             console.log(error);

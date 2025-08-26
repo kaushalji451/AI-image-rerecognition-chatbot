@@ -5,6 +5,7 @@ const imageSchema = new mongoose.Schema(
     caption: { type: String, required: true },
     aiResponce: { type: String, required: true },
     FollowUp: [{ type: mongoose.Schema.Types.ObjectId, ref: "FollowUp" }],
+    imageUrl: { type: String, required: true },
   },
   { timestamps: true }
 );

@@ -5,13 +5,15 @@ const User = require("../modles/user");
 
 ImageResponceRoute.post("/", async (req, res) => {
   try {
-    const { label, response } = req.body;
+    console.log("know adding the data into db ");
+    const { label, response,imageUrl } = req.body;
+    console.log(label, response,imageUrl);
     const userid = req.query.id;
 
-    if (!label || !response || !userid) {
+    if (!label || !response || !userid || !imageUrl) {
       return res
         .status(400)
-        .json({ error: "Label, response, and user ID are required." });
+        .json({ error: "Label, response, user ID, and image URL are required." });
     }
 
     // check user
@@ -19,12 +21,14 @@ ImageResponceRoute.post("/", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
+    console.log("User found:", user);
 
     // 1️⃣ create new Image document
     const newImage = new Image({
       caption: label,
       aiResponce: response,
       FollowUp: [],
+      imageUrl: imageUrl
     });
     await newImage.save();
 
