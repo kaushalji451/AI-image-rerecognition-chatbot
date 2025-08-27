@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import {useEffect } from "react";
 import IsLoggedIn from "../utils/IsLoggedIn";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Logout from "../components/Logout";
-type ProfileType = {
-  name: string;
-  email: string;
-  phone : string;
-  avatar: string;
-  username: string;
-};
+// type ProfileType = {
+//   name: string;
+//   email: string;
+//   phone : string;
+//   avatar: string;
+//   username: string;
+// };
 
 const Profile = () => {
   const navigate = useNavigate();
