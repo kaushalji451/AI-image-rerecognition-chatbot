@@ -26,6 +26,14 @@ const Navbar = () => {
     <div className="flex px-10 justify-between py-4 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text">
       <Link to={"/"} className="font-bold text-black cursor-pointer">LOGO</Link>
       <div className="flex gap-2">
+        <div className="pe-4 flex items-center">
+          <ul className="flex items-center gap-5 text-semibold text-lg">
+            <Link to={"/"}>Home</Link>
+            <Link to={"/"}>About</Link>
+            <Link to={"/"}>Services</Link>
+            <Link to={"/"}>Contact</Link>
+          </ul>
+        </div>
         {loggedIn ? (
           <>
             <Link to="/profile" className="bg-green-200 px-3 py-1 rounded-full">Profile</Link>

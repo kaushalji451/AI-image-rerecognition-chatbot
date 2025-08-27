@@ -61,7 +61,7 @@ const ChatBox = () => {
                 // 7. Save Q&A to backend
                 try {
                     console.log("Saving follow-up:",imageid, { question: input, answer: botText });
-                    await fetch(`http://localhost:3000/followups?imageId=${imageid}`, {
+                    await fetch(`${import.meta.env.VITE_BACKEND_URL}/followups?imageId=${imageid}`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({

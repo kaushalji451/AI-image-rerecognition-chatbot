@@ -5,7 +5,7 @@ const chatresponce = async (data: string, work?: string) => {
     const info = `${data} ${work}`
     console.log("Sending data to chat API:", info);
     try {
-        let response = await fetch("http://localhost:3000/chat", {
+        let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

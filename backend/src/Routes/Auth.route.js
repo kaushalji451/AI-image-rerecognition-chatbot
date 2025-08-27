@@ -13,6 +13,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 AuthRouter.post("/register", async (req, res) => {
     const { email, password } = req.body;
     console.log(req.body);
+    const checkuser = await User.findOne({ email: email });
+    if (checkuser) {
+        return res.status(400).json({ message: "User already exists" });
+    }
     const hashpassword = await bycript.hash(password, 10);
     const user = new User({ email, password: hashpassword });
     user.save();

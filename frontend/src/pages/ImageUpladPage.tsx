@@ -76,7 +76,7 @@ export default function ImageUploadPage() {
         setLoading(true);
 
         try {
-            let data = await fetch('http://localhost:3000/upload', {
+            let data = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload`, {
                 method: "post",
                 body: formdata,
             });

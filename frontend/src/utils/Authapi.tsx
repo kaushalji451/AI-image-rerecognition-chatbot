@@ -1,5 +1,5 @@
 import axios from "axios";
-const API = "http://localhost:3000";
+const API = `${import.meta.env.VITE_BACKEND_URL}`;
 
 export const registerUser = async (email: String, password: String) =>
     await axios.post(`${API}/auth/register`, { email, password });
