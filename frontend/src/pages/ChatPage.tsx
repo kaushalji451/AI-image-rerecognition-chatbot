@@ -25,7 +25,7 @@ const ChatPage = () => {
       console.log(response);
       const fetchData = async () => {
         if (!response?.predictions?.label) return; // safeguard
-        if(!response?.imageUrl) return;
+        if (!response?.imageUrl) return;
 
         const currentLabel = response.predictions.label;
         const currentScore = response.predictions.score;
@@ -36,8 +36,8 @@ const ChatPage = () => {
         if (currentScore != null) {
           setScore(currentScore);
         }
-        if(imageUrl != null){
-        setImageUrl(imageUrl);
+        if (imageUrl != null) {
+          setImageUrl(imageUrl);
         }
 
         // ✅ Check localStorage first
@@ -65,8 +65,9 @@ const ChatPage = () => {
           localStorage.setItem("imageResponse", newResponse);
           localStorage.setItem("imageUrl", imageUrl);
           let userid = await IsLoggedIn();
-          console.log(userid.id);
-          let res = await imageRes(currentLabel, newResponse,userid.id, imageUrl);
+          console.log("this is user", userid);
+          console.log("this is userid", userid.userData._id);
+          let res = await imageRes(currentLabel, newResponse,userid.userData._id,imageUrl);
           console.log("Response saved to DB:", res);
           if (res) {
             localStorage.setItem("imageId", res.imageId);
@@ -85,7 +86,7 @@ const ChatPage = () => {
     <div className="h-screen w-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white flex flex-col md:flex-row relative">
       {/* Left Side - Image Response */}
       <div className="flex-1 overflow-y-auto p-4 w-full">
-        <ImageResponce responseText={imageResponse} score={score} imageUrl={imageUrl}/>
+        <ImageResponce responseText={imageResponse} score={score} imageUrl={imageUrl} />
       </div>
       {/* Right Side - Chat Box */}
       <ChatBox />

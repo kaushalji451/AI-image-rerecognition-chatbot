@@ -6,8 +6,8 @@ const User = require("../modles/user");
 ImageResponceRoute.post("/", async (req, res) => {
   try {
     console.log("know adding the data into db ");
-    const { label, response,imageUrl } = req.body;
-    console.log(label, response,imageUrl);
+    const { label, response, imageUrl } = req.body;
+    console.log(label, response, imageUrl);
     const userid = req.query.id;
 
     if (!label || !response || !userid || !imageUrl) {
@@ -28,7 +28,7 @@ ImageResponceRoute.post("/", async (req, res) => {
       caption: label,
       aiResponce: response,
       FollowUp: [],
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
     });
     await newImage.save();
 

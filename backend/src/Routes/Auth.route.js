@@ -53,7 +53,7 @@ AuthRouter.get("/profile", (req, res) => {
                 return res.status(404).json({ message: "User not found" });
             }
             console.log("User profile fetched:", user.email);
-            res.json({ message: "Welcome to profile", id: user._id });
+            res.json({ message: "Welcome to profile", userData : user });
         } catch (error) {
             res.status(500).json({ message: "Server error" });
         }

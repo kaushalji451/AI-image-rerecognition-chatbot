@@ -1,5 +1,7 @@
-const imageRes = async (label : String,response : String,userid : any,imageUrl : String) => {
-    console.log("imageRes saved in db:", label, response,imageUrl);
+const imageRes = async (label: String, response: String, userid: any, imageUrl: String) => {
+
+    console.log("imageRes saved in db:", label, response, imageUrl);
+    
     try {
         let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/imageresponce?id=${userid}`, {
             method: "POST",
@@ -9,13 +11,13 @@ const imageRes = async (label : String,response : String,userid : any,imageUrl :
             body: JSON.stringify({
                 label,
                 response,
-                imageUrl
+                imageUrl,
             })
         });
 
         const responce = await res.json();
-        if(responce) {
-            console.log("this is res ",responce);
+        if (responce) {
+            console.log("this is res ", responce);
             return responce;
         }
     } catch (error) {
