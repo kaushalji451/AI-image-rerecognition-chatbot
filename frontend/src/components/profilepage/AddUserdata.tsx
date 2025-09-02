@@ -35,7 +35,8 @@ export default function AddUserdata({ userid }: { userid: string }) {
     data = await data.json();
     console.log("Response from server:", data);
     console.log("Form Data:", formData);
-    navigate("/profile");
+    alert("Data Updated Successfully.");
+    navigate("/");
   };
 
   return (

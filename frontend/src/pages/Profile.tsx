@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import IsLoggedIn from "../utils/IsLoggedIn";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Logout from "../components/Logout";
 import AddUserdata from "../components/profilepage/AddUserdata";
+import Loader from "../components/Loader";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [Profile, setProfile] = useState<any>(null);
-
+  const [userid, setuserid] = useState<any>(null);
   const fetchProfile = async () => {
     const data = await IsLoggedIn();
     if (data) {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user?_id=${data.userData._id}`);
       const user = await response.json();
       console.log("user from profile", user.user);
+      setuserid(user.user._id)
       setProfile({
         name: user.user.name,
         email: user.user.email,
@@ -22,7 +24,7 @@ const Profile = () => {
         avatar: user.user.avatar,
         username: user.user.username,
         images: user.user.images,
-        phoneNo: user.user.phoneNo
+        phoneNo: user.user.phoneNo,
       });
     } else {
       setProfile(null);
@@ -38,9 +40,17 @@ const Profile = () => {
   }, []);
 
 
-  if (!Profile || !Profile.username) {
-    return <AddUserdata userid={Profile?._id ?? ""} />;
+  if(!Profile){
+    return (
+    <div className="h-screen  bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+      <Loader/>
+    </div>
+  );
   }
+  else if (!Profile || !Profile.username) {
+    return <AddUserdata userid={userid} />;
+  }
+
   return (
     <div>
       {Profile ? (
@@ -174,7 +184,7 @@ const Profile = () => {
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+       " "
       )}
     </div>
   )
