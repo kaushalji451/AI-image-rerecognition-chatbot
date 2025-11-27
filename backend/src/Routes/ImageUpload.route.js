@@ -29,9 +29,13 @@ router.post("/", upload.single('image'), async (req, res) => {
             streamifier.createReadStream(req.file.buffer).pipe(stream);
         });
 
+        console.log("this is cloudinary upload ", cloudinaryUpload);
+        console.log("hug face api",HUGGING_FACE_API_KEY);
+
         // Call HuggingFace API with buffer
         const response = await axios.post(
-            'https://api-inference.huggingface.co/models/google/vit-large-patch16-224',
+            // 'https://api-inference.huggingface.co/models/google/vit-large-patch16-224',
+            'https://router.huggingface.co/hf-inference/models/google/vit-base-patch16-224',
             req.file.buffer,
             {
                 headers: {
@@ -44,8 +48,10 @@ router.post("/", upload.single('image'), async (req, res) => {
 
         const predictions = response.data;
 
+        console.log("this is api predictions", predictions);
+
         if (Array.isArray(predictions) && predictions.length > 0) {
-            console.log(cloudinaryUpload.secure_url,predictions[0].label,`${Math.round(predictions[0].score * 100)}%`);
+            console.log(cloudinaryUpload.secure_url, predictions[0].label, `${Math.round(predictions[0].score * 100)}%`);
             return res.json({
                 success: true,
                 imageUrl: cloudinaryUpload.secure_url,
@@ -59,7 +65,7 @@ router.post("/", upload.single('image'), async (req, res) => {
         }
     } catch (error) {
         console.error("Upload route error:", error.message);
-        return res.status(500).json({ error: "Something went wrong", details: error.message });
+        return res.status(500).json({ error: "Something went wrong ", details: error.message });
     }
 });
 
