@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import IsLoggedIn from "../utils/IsLoggedIn";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
